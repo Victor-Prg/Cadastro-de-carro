@@ -31,7 +31,7 @@ public class TelaCategoria extends JFrame {
         campoId = new JTextField();
         campoId.setBounds(80, 20, 80, 25);
         campoId.setEditable(false);
-        add(campoId);
+        add(campoId);//  Flávio criou isso aqui
 
         JLabel labelNome = new JLabel("Nome:");
         labelNome.setBounds(20, 55, 60, 25);
