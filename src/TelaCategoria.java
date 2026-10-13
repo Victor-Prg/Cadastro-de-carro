@@ -19,19 +19,16 @@ public class TelaCategoria extends JFrame {
         setSize(500, 420);
         setLayout(null);
         setLocationRelativeTo(null);
-        // Fecha só esta tela, sem encerrar o sistema
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
 
-        // --- Campos ---
         JLabel labelId = new JLabel("Id:");
         labelId.setBounds(20, 20, 60, 25);
         add(labelId);
 
-        // O id é gerado pelo sistema, por isso o campo não pode ser digitado
         campoId = new JTextField();
         campoId.setBounds(80, 20, 80, 25);
         campoId.setEditable(false);
-        add(campoId);//  Flávio criou isso aqui
+        add(campoId);
 
         JLabel labelNome = new JLabel("Nome:");
         labelNome.setBounds(20, 55, 60, 25);
@@ -41,7 +38,6 @@ public class TelaCategoria extends JFrame {
         campoNome.setBounds(80, 55, 380, 25);
         add(campoNome);
 
-        // --- Botões ---
         JButton botaoSalvar = new JButton("Salvar");
         botaoSalvar.setBounds(20, 95, 100, 30);
         botaoSalvar.addActionListener(e -> salvar());
@@ -62,15 +58,12 @@ public class TelaCategoria extends JFrame {
         botaoPesquisar.addActionListener(e -> pesquisar());
         add(botaoPesquisar);
 
-        // --- Grid ---
         modeloTabela = new DefaultTableModel();
         modeloTabela.addColumn("Id");
         modeloTabela.addColumn("Nome");
 
         tabela = new JTable(modeloTabela);
-        // Não deixa editar direto na grid
         tabela.setDefaultEditor(Object.class, null);
-        // Ao selecionar uma linha, joga os dados dela nos campos
         tabela.getSelectionModel().addListSelectionListener(e -> selecionar());
 
         JScrollPane scroll = new JScrollPane(tabela);
@@ -82,7 +75,6 @@ public class TelaCategoria extends JFrame {
 
     private void carregarTabela(String filtro) {
         modeloTabela.setRowCount(0);
-
         for (Categoria categoria : TelaPrincipal.categorias) {
             if (categoria.getNome().toLowerCase().contains(filtro.toLowerCase())) {
                 modeloTabela.addRow(new Object[] { categoria.getId(), categoria.getNome() });
@@ -97,18 +89,13 @@ public class TelaCategoria extends JFrame {
 
     private void selecionar() {
         int linha = tabela.getSelectedRow();
-
-        if (linha == -1) {
-            return;
-        }
-
+        if (linha == -1) return;
         campoId.setText(modeloTabela.getValueAt(linha, 0).toString());
         campoNome.setText(modeloTabela.getValueAt(linha, 1).toString());
     }
 
     private void salvar() {
         String nome = campoNome.getText().trim();
-
         if (nome.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Informe o nome da categoria.");
             return;
@@ -127,16 +114,13 @@ public class TelaCategoria extends JFrame {
             JOptionPane.showMessageDialog(this, "Selecione uma categoria na grid.");
             return;
         }
-
         String nome = campoNome.getText().trim();
-
         if (nome.isEmpty()) {
             JOptionPane.showMessageDialog(this, "Informe o nome da categoria.");
             return;
         }
 
         int id = Integer.parseInt(campoId.getText());
-
         for (Categoria categoria : TelaPrincipal.categorias) {
             if (categoria.getId() == id) {
                 categoria.setNome(nome);
@@ -153,15 +137,10 @@ public class TelaCategoria extends JFrame {
             return;
         }
 
-        int resposta = JOptionPane.showConfirmDialog(this, "Deseja excluir a categoria?", "Excluir",
-                JOptionPane.YES_NO_OPTION);
-
-        if (resposta != JOptionPane.YES_OPTION) {
-            return;
-        }
+        int resposta = JOptionPane.showConfirmDialog(this, "Deseja excluir a categoria?", "Excluir", JOptionPane.YES_NO_OPTION);
+        if (resposta != JOptionPane.YES_OPTION) return;
 
         int id = Integer.parseInt(campoId.getText());
-
         for (int i = 0; i < TelaPrincipal.categorias.size(); i++) {
             if (TelaPrincipal.categorias.get(i).getId() == id) {
                 TelaPrincipal.categorias.remove(i);
@@ -176,5 +155,4 @@ public class TelaCategoria extends JFrame {
     private void pesquisar() {
         carregarTabela(campoNome.getText().trim());
     }
-
 }
